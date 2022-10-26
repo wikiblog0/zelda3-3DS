@@ -4,7 +4,11 @@
 #include "features.h"
 #include "snes/snes_regs.h"
 #include "spc_player.h"
+#ifdef __3DS__
+#include "opus/opus.h"
+#else
 #include "third_party/opus-1.3.1-stripped/opus.h"
+#endif
 #include "config.h"
 #include "assets.h"
 

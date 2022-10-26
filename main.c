@@ -27,6 +27,10 @@
 #include "util.h"
 #include "audio.h"
 
+#ifdef __3DS__
+#include <3ds.h>
+#endif
+
 static bool g_run_without_emu = 0;
 
 void ShaderInit();
@@ -282,6 +286,12 @@ void OpenGLRenderer_Create(struct RendererFuncs *funcs);
 
 #undef main
 int main(int argc, char** argv) {
+#if __3DS__
+  gfxInitDefault();
+  consoleInit(GFX_BOTTOM, NULL);
+  osSetSpeedupEnable(true);
+  chdir("sdmc:/3ds/zelda3/");
+#endif
   argc--, argv++;
   const char *config_file = NULL;
   if (argc >= 2 && strcmp(argv[0], "--config") == 0) {
@@ -402,7 +412,7 @@ int main(int argc, char** argv) {
   if (g_config.autosave)
     HandleCommand(kKeys_Load + 0, true);
 
-  while(running) {
+  while(aptMainLoop() && running) {
     while(SDL_PollEvent(&event)) {
       switch(event.type) {
       case SDL_CONTROLLERDEVICEADDED:
