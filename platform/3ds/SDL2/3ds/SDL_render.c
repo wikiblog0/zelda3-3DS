@@ -90,6 +90,10 @@ DECLSPEC int SDLCALL SDL_RenderClear(SDL_Renderer * renderer)
 	return 1;
 }
 
+static unsigned long thisTime = 0;
+static unsigned long lastTime = 0;
+static bool skip = false;
+
 inline DECLSPEC int SDLCALL SDL_RenderCopy(SDL_Renderer * renderer,
                                     	   SDL_Texture * texture,
                                     	   const SDL_Rect * srcrect,
@@ -97,6 +101,18 @@ inline DECLSPEC int SDLCALL SDL_RenderCopy(SDL_Renderer * renderer,
 {
 	if (!texture)
 		return -1;
+
+	lastTime = thisTime;
+	thisTime = osGetTime();
+	if (thisTime - lastTime > (1000 / 60))
+	{
+		skip = !skip;
+		if (skip) {
+			//gfxSwapBuffers();
+			//gspWaitForVBlank();
+			return 0;
+		}
+	}
 
 	char* fb = (char*)gfxGetFramebuffer(GFX_TOP, GFX_LEFT, 0, 0);
 /*
@@ -143,13 +159,16 @@ inline DECLSPEC int SDLCALL SDL_RenderCopy(SDL_Renderer * renderer,
 		//	break;
 	}
 
+	gfxSwapBuffers();
+	gspWaitForVBlank();
+
 	return 0;
 }
 
 DECLSPEC void SDLCALL SDL_RenderPresent(SDL_Renderer * renderer)
 {
-	gfxSwapBuffers();
-	gspWaitForVBlank();
+	//gfxSwapBuffers();
+	//gspWaitForVBlank();
 }
 
 DECLSPEC void SDLCALL SDL_DestroyTexture(SDL_Texture * texture)
