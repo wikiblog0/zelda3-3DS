@@ -202,6 +202,7 @@ static void SDLCALL AudioCallback(void *userdata, Uint8 *stream, int len) {
     g_audiobuffer_cur += n;
     stream += n;
     len -= n;
+    printf("\n");
   }
 
   ZeldaDiscardUnusedAudioFrames();

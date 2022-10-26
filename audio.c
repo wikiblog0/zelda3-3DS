@@ -419,7 +419,7 @@ void ZeldaPushApuState() {
   ZeldaApuUnlock();
 }
 
-static void ZeldaPopApuState() {
+static inline void ZeldaPopApuState() {
   if (g_apu_write_count != 0)
     memcpy(g_zenv.player->input_ports, &g_apu_write_ents[(g_apu_write_ent_pos - g_apu_write_count--) & 0xf], 4);
 }
@@ -451,7 +451,7 @@ uint8_t zelda_apu_read(uint32_t adr) {
   return g_zenv.player->port_to_snes[adr & 0x3];
 }
 
-void ZeldaRenderAudio(int16 *audio_buffer, int samples, int channels) {
+inline void ZeldaRenderAudio(int16 *audio_buffer, int samples, int channels) {
   ZeldaApuLock();
   ZeldaPopApuState();
   SpcPlayer_GenerateSamples(g_zenv.player);
