@@ -102,17 +102,17 @@ inline DECLSPEC int SDLCALL SDL_RenderCopy(SDL_Renderer * renderer,
 	if (!texture)
 		return -1;
 
-	lastTime = thisTime;
-	thisTime = osGetTime();
-	if (thisTime - lastTime > (1000 / 60))
-	{
-		skip = !skip;
-		if (skip) {
+//	lastTime = thisTime;
+//	thisTime = osGetTime();
+//	if (thisTime - lastTime > (1000 / 60))
+//	{
+//		skip = !skip;
+//		if (skip) {
 			//gfxSwapBuffers();
 			//gspWaitForVBlank();
-			return 0;
-		}
-	}
+//			return 0;
+//		}
+//	}
 
 	char* fb = (char*)gfxGetFramebuffer(GFX_TOP, GFX_LEFT, 0, 0);
 /*
@@ -141,10 +141,12 @@ inline DECLSPEC int SDLCALL SDL_RenderCopy(SDL_Renderer * renderer,
 			//b = *in++;
 			
 			pos = &fb[((x*240) + (240-y-1)) * 3];
-			*pos++ = *in++;
-			*pos++ = *in++;
-			*pos++ = *in++;
-			in++;
+			memcpy(pos, in, 3);
+			in+=4;
+			//*pos++ = *in++;
+			//*pos++ = *in++;
+			//*pos++ = *in++;
+			//in++;
 			
 
 			//in += 4;
